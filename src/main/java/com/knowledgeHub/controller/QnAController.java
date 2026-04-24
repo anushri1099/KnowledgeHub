@@ -1,51 +1,41 @@
 package com.knowledgeHub.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.knowledgeHub.Entity.QnAItems;
-import com.knowledgeHub.Repository.QnARepository;
+import com.knowledgeHub.DTO.AnswerDTO;
+import com.knowledgeHub.DTO.QuestionDTO;
+import com.knowledgeHub.services.QnAService;
 
 @RestController
-@RequestMapping("/api/QnA")
+@RequestMapping("/api/qna")
 public class QnAController {
-	
-	private final QnARepository repo;
-	
-	public QnAController(QnARepository repo) {
-		this.repo = repo;
-	}
-	@PostMapping
-	public ResponseEntity<?> postQuestion(@RequestBody QnAItems question){
-		
-		repo.save(question);
-		return ResponseEntity.status(HttpStatus.CREATED).body(question);
-	}
-	
-	@GetMapping
-	public ResponseEntity<?> getQuestions(){
-		List<QnAItems> questionList = repo.findAll();
-		return ResponseEntity.status(HttpStatus.OK).body(questionList);
-	}
-	
-	@PutMapping("/{id}/answer")
-	public ResponseEntity<QnAItems> updateAnswer(
-	        @PathVariable Long id,
-	        @RequestBody String answer) {
-	    QnAItems item = repo.findById(id)
-	                           .orElseThrow(() -> new RuntimeException("Question not found"));
-	    item.setAnswer(answer);
-	    return ResponseEntity.ok(repo.save(item));
+
+	@Autowired
+	private QnAService service;
+
+	//Create question
+	@PostMapping("/question")
+	public ResponseEntity<?> createQuestion(@RequestBody QuestionDTO dto) {
+		return ResponseEntity.ok(service.saveQuestion(dto));
 	}
 
+	//Add answer to question
+	@PostMapping("/{id}/answer")
+	public ResponseEntity<?> addAnswer(@PathVariable Long id, @RequestBody AnswerDTO dto) {
+
+		return ResponseEntity.ok(service.addAnswer(id, dto));
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getQuestionWithAnswers(@PathVariable Long id) {
+	    return ResponseEntity.ok(service.getQuestionWithAnswers(id));
+	}
 
 }
