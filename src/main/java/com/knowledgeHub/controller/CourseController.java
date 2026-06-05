@@ -1,22 +1,19 @@
 package com.knowledgeHub.controller;
 
+import com.knowledgeHub.Entity.CourseItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.knowledgeHub.DTO.CourseDTO;
 import com.knowledgeHub.services.CourseService;
 
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/course")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CourseController {
 
     @Autowired
@@ -38,5 +35,11 @@ public class CourseController {
     @GetMapping("/tech/{name}")
     public ResponseEntity<?> getByTech(@PathVariable String name) {
         return service.getCoursesByTechStack(name);
+    }
+
+    //Get All Courses
+    @GetMapping("/getAllCourses")
+    public List<CourseItem> getAllCourses(){
+        return service.getAllCourses();
     }
 }
