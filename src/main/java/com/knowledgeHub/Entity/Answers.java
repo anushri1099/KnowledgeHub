@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "answers")
+@Table(name = "answers",schema = "knowledgeHub")
 public class Answers {
 
     public String getAnswerText() {
@@ -28,7 +28,7 @@ public class Answers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "LONGTEXT")
+    @Column
     private String answerText;
 
     @ManyToOne

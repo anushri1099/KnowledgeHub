@@ -2,6 +2,7 @@ package com.knowledgeHub.Entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +15,7 @@ import lombok.*;
 
 
 @Entity
-@Table(name ="tech_stacks")
+@Table(name ="tech_stacks",schema = "knowledgeHub")
 @Getter
 @Setter
 public class TechStack {
@@ -26,8 +27,9 @@ public class TechStack {
     @Column(nullable = false, unique = true)
     private String techstackName;
 
-    @OneToMany(mappedBy = "techStack", cascade = CascadeType.ALL)
-    private List<CourseItem> courses;
+//    @OneToMany(mappedBy = "techStack")
+//    @JsonManagedReference
+//    private List<CourseItem> courses;
     
 	public String getTechstackName() {
 		return techstackName;
